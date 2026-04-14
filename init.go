@@ -16,6 +16,8 @@ func (cfg *apiConfig) dbConnect() {
 	}
 
 	cfg.client = client
+
+	cfg.coll = cfg.client.Database(cfg.db_name).Collection(cfg.coll_name)
 }
 
 func (cfg *apiConfig) dbDisconnect() {

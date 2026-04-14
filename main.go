@@ -4,7 +4,7 @@ import (
 	"net/http"
 )
 
-// PORT: 95887
+// PORT: 9517
 
 func main() {
 
@@ -25,11 +25,18 @@ func main() {
 	mux := http.NewServeMux()
 	server := http.Server{
 		Handler: mux,
-		Addr:    ":95887",
+		Addr:    ":9517",
 	}
 
 	// SET HANDLER FUNCTIONS
-	mux.HandleFunc("GET /api/courses", cfg.handlerQuery)
+	mux.HandleFunc("GET /api/courses", cfg.handlerGenericSearch)                 // UNTESTED
+	mux.HandleFunc("GET /api/schedule", cfg.handlerGetProfessorSchedule)         // UNTESTED
+	mux.HandleFunc("GET /api/report", cfg.handlerGetReport)                      // TODO
+	mux.HandleFunc("GET /api/rooms", cfg.handlerGetRooms)                        // TODO
+	mux.HandleFunc("POST /api/descriptions", cfg.handlerUpdateCourseDescription) // TODO
+	mux.HandleFunc("POST /api/courses", cfg.handlerCreateCourse)                 // TODO
+	mux.HandleFunc("POST /api/archive", cfg.handlerDeleteCourse)                 // TODO
 
+	// START SERVICE
 	server.ListenAndServe()
 }

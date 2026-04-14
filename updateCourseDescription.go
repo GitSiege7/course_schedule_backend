@@ -5,8 +5,12 @@ import (
 	"net/http"
 )
 
-func (cfg *apiConfig) handlerQuery(w http.ResponseWriter, r *http.Request) {
+func (cfg *apiConfig) handlerUpdateCourseDescription(w http.ResponseWriter, r *http.Request) {
 	// PARSE PARAMETERS
+	type request struct {
+		CRN  string `json:"crnToModify"`
+		Desc string `json:"newDescription"`
+	}
 	var req request
 
 	decoder := json.NewDecoder(r.Body)
@@ -17,11 +21,11 @@ func (cfg *apiConfig) handlerQuery(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// QUERY COLLECTION
-	coll := cfg.client.Database(cfg.db_name).Collection(cfg.coll_name)
 
-	//...
+	// ...
 
-	// RETURN JSON DATA
+	// RETURN BSON DATA
 
-	//...
+	// ...
+
 }
