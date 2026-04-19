@@ -30,7 +30,7 @@ func (cfg *apiConfig) handlerGenericSearch(w http.ResponseWriter, r *http.Reques
 	case "Building":
 		filter = bson.D{{Key: "meetingRoom", Value: req.ParamValue}}
 	case "Meeting Days":
-		days := strings.Split(req.ParamValue, ",")
+		days := strings.Split(req.ParamValue, "/")
 		filter = bson.D{{Key: "meetingDays", Value: bson.D{{
 			Key: "$all", Value: bson.A{days},
 		}}}}
