@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"strconv"
+	"strings"
 
 	"go.mongodb.org/mongo-driver/v2/bson"
 )
@@ -11,8 +13,8 @@ import (
 func (cfg *apiConfig) handlerGenericSearch(w http.ResponseWriter, r *http.Request) {
 	// PARSE PARAMETERS
 	type request struct {
-		QueryParam string // "Instructor" | "Building" | "Meeting Days" | "Faculty Ratio"
-		ParamValue string
+		QueryParam string `json:"queryParam"`
+		ParamValue string `json:"paramValue"`
 	}
 	var req request
 
@@ -20,23 +22,42 @@ func (cfg *apiConfig) handlerGenericSearch(w http.ResponseWriter, r *http.Reques
 	req.ParamValue = r.URL.Query().Get("paramValue")
 
 	// QUERY COLLECTION
-
 	var filter bson.D
 
 	switch req.QueryParam {
 	case "Instructor":
-		filter = bson.D{{Key: "Instructor", Value: req.ParamValue}}
+		filter = bson.D{{Key: "instructorName", Value: req.ParamValue}}
 	case "Building":
-		filter = bson.D{{Key: "Building", Value: req.ParamValue}}
+		filter = bson.D{{Key: "meetingRoom", Value: req.ParamValue}}
 	case "Meeting Days":
-		filter = bson.D{{Key: "Meeting Days", Value: req.ParamValue}}
+		days := strings.Split(req.ParamValue, ",")
+		filter = bson.D{{Key: "meetingDays", Value: bson.D{{
+			Key: "$all", Value: bson.A{days},
+		}}}}
 	case "Faculty Ratio":
-		filter = bson.D{{Key: "Faculty Ratio", Value: req.ParamValue}}
+		pValue, err := strconv.Atoi(req.ParamValue)
+		if err != nil {
+			respondWithError(w, 400, "Invalid parameter value input")
+			return
+		}
+		filter = bson.D{{Key: "$expr", Value: bson.D{{
+			Key: "$gte", Value: bson.A{
+				bson.D{{
+					Key: "$divide", Value: bson.A{
+						"$enrollment", bson.D{{
+							Key: "$add", Value: bson.A{
+								"$totalTAs", 1,
+							}}},
+					},
+				}},
+				pValue,
+			},
+		}}}}
 	}
 
 	cursor, err := cfg.coll.Find(context.TODO(), filter)
 	if err != nil {
-		respondWithError(w, 500, "Failed to query collection")
+		respondWithError(w, 500, fmt.Sprintf("Failed to query collection: %s", err))
 		return
 	}
 	defer cursor.Close(context.TODO())
@@ -49,7 +70,6 @@ func (cfg *apiConfig) handlerGenericSearch(w http.ResponseWriter, r *http.Reques
 	}
 
 	// RETURN COURSE DATA
-
 	err = respondWithJSON(w, 200, result)
 	if err != nil {
 		fmt.Println("Failed to respond")

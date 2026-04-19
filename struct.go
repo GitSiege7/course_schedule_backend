@@ -11,18 +11,18 @@ type apiConfig struct {
 }
 
 type course struct {
-	term              string
-	level             string
-	section           string
-	crn               string
-	shortName         string // ex. "COP 4930"
-	longName          string // ex. "Programming Concepts"
-	enrollment        int    // # of students in class
-	totalTAs          int    // # of UG and GR TAs
-	meetingRoom       string
-	meetingDays       []string // slice of single letter day indicators (M, T, W, R, F)
-	meetingTimes      []string // two element slice: start/end time
-	instructorName    string
-	instructorEmail   string
-	courseDescription string
+	Term              string   `bson:"term" json:"term"`
+	Level             string   `bson:"level" json:"level"`
+	Section           string   `bson:"section" json:"section"`
+	CRN               string   `bson:"crn" json:"crn"`
+	ShortName         string   `bson:"shortName" json:"shortName"`
+	LongName          string   `bson:"longName" json:"longName"`
+	Enrollment        int      `bson:"enrollment" json:"enrollment"`
+	TotalTAs          int      `bson:"totalTAs" json:"totalTAs"`
+	MeetingRoom       string   `bson:"meetingRoom" json:"meetingRoom"`
+	MeetingDays       []string `bson:"meetingDays" json:"meetingDays"`
+	MeetingTimes      []string `bson:"meetingTimes" json:"meetingTimes"`
+	InstructorName    string   `bson:"instructorName" json:"instructorName"`
+	InstructorEmail   string   `bson:"instructorEmail" json:"instructorEmail"`
+	CourseDescription string   `bson:"courseDescription" json:"courseDescription"`
 }

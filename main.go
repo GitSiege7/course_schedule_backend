@@ -10,8 +10,8 @@ func main() {
 
 	// CREATE CFG TO HOLD API STATE
 	cfg := &apiConfig{
-		uri:       "mongodb+srv://root:WvgrxVMB8aRcOMUe@course-schedule.gdpssbf.mongodb.net/?appName=course-schedule",
-		db_name:   "course_scheduler_db",
+		uri:       "mongodb+srv://root:root@cen4020.qtbkpgn.mongodb.net/?appName=CEN4020",
+		db_name:   "bellini_classes_db",
 		coll_name: "bellini_classes",
 	}
 
@@ -29,13 +29,14 @@ func main() {
 	}
 
 	// SET HANDLER FUNCTIONS
-	mux.HandleFunc("GET /api/courses", cfg.handlerGenericSearch)                 // UNTESTED
-	mux.HandleFunc("GET /api/schedule", cfg.handlerGetProfessorSchedule)         // UNTESTED
-	mux.HandleFunc("GET /api/report", cfg.handlerGetReport)                      // TODO
-	mux.HandleFunc("GET /api/rooms", cfg.handlerGetRooms)                        // TODO
-	mux.HandleFunc("POST /api/descriptions", cfg.handlerUpdateCourseDescription) // TODO
-	mux.HandleFunc("POST /api/courses", cfg.handlerCreateCourse)                 // TODO
-	mux.HandleFunc("POST /api/archive", cfg.handlerDeleteCourse)                 // TODO
+	mux.HandleFunc("GET /api/courses", cfg.handlerGenericSearch)
+	mux.HandleFunc("GET /api/schedule", cfg.handlerGetProfessorSchedule)
+	mux.HandleFunc("GET /api/report", cfg.handlerGetReport)
+	mux.HandleFunc("GET /api/rooms", cfg.handlerGetRooms)
+	mux.HandleFunc("GET /api/all", cfg.handlerGetAllCourses)
+	mux.HandleFunc("POST /api/descriptions", cfg.handlerUpdateCourseDescription)
+	mux.HandleFunc("POST /api/courses", cfg.handlerCreateCourse)
+	mux.HandleFunc("POST /api/archive", cfg.handlerDeleteCourse)
 
 	// START SERVICE
 	server.ListenAndServe()

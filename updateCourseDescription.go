@@ -1,8 +1,12 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
+
+	"go.mongodb.org/mongo-driver/v2/bson"
 )
 
 func (cfg *apiConfig) handlerUpdateCourseDescription(w http.ResponseWriter, r *http.Request) {
@@ -20,12 +24,20 @@ func (cfg *apiConfig) handlerUpdateCourseDescription(w http.ResponseWriter, r *h
 		return
 	}
 
-	// QUERY COLLECTION
+	// UPDATE COLLECTION
+	_, err = cfg.coll.UpdateOne(context.TODO(),
+		bson.D{{Key: "crn", Value: req.CRN}},
+		bson.D{{Key: "$set", Value: bson.D{{
+			Key: "courseDescription", Value: req.Desc,
+		}}}})
+	if err != nil {
+		respondWithError(w, 400, fmt.Sprintf("Failed update query: %s", err))
+		return
+	}
 
-	// ...
-
-	// RETURN BSON DATA
-
-	// ...
-
+	// RETURN DATA
+	err = respondWithJSON(w, 200, map[string]string{"msg": "Update Successful"})
+	if err != nil {
+		fmt.Println("Failed to respond")
+	}
 }

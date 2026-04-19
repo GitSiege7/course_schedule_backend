@@ -17,19 +17,6 @@ func respondWithJSON(w http.ResponseWriter, code int, dat interface{}) error {
 	return nil
 }
 
-// UNNECESSARY?
-// func respondWithBSON(w http.ResponseWriter, code int, dat interface{}) error {
-// 	resp, err := bson.Marshal(dat)
-// 	if err != nil {
-// 		return err
-// 	}
-
-// 	w.Header().Set("Content-Type", "application/bson")
-// 	w.WriteHeader(code)
-// 	w.Write(resp)
-// 	return nil
-// }
-
 func respondWithError(w http.ResponseWriter, code int, msg string) {
 	respondWithJSON(w, code, map[string]string{"error": msg})
 }
