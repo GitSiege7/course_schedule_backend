@@ -2,6 +2,8 @@ package main
 
 import (
 	"net/http"
+
+	"github.com/rs/cors"
 )
 
 // PORT: 9517
@@ -23,8 +25,10 @@ func main() {
 
 	// CREATE HTTP SERVICE
 	mux := http.NewServeMux()
+	handler := cors.Default().Handler(mux)
+
 	server := http.Server{
-		Handler: mux,
+		Handler: handler,
 		Addr:    ":9517",
 	}
 
