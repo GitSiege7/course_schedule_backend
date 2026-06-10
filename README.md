@@ -1,4 +1,4 @@
-# Documentation for course_scheduler_backend
+# Documentation
 `course_scheduler_backend` is a RESTful API designed to work with a database of college course and faculty data. Using Go's HTTP server, it handles all the functionality specified by the front end, which includes CRUD operations and specialized data reports. In this implementation, we chose to use MongoDB as it would be easier than a relational database to implement our choice of data structure for the courses. The backend uses the MongoDB Go driver to query the database and other common Go packages to format and return the information to the frontend.
 
 ### Endpoints
